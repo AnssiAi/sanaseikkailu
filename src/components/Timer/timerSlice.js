@@ -6,6 +6,7 @@ export const timerSlice = createSlice({
   initialState: {
     value: 0,
     active: false,
+    interval: 0,
   },
   reducers: {
     createTimer: (state, action) => {
@@ -15,8 +16,8 @@ export const timerSlice = createSlice({
     stopTimer: state => {
       state.active = false
     },
-    resetTimer: (state, action) => {
-      state.value = action.payload
+    resetTimer: state => {
+      state.value = state.interval
       state.active = true
     },
     decTimer: state => {
@@ -30,6 +31,9 @@ export const timerSlice = createSlice({
     getActiveTimer: (state, action) => {
       action.payload = state.active
     },
+    setInterval: (state, action) => {
+      state.interval = action.payload
+    },
   },
 })
 
@@ -40,6 +44,7 @@ export const {
   decTimer,
   getTime,
   getActiveTimer,
+  setInterval,
 } = timerSlice.actions
 
 export default timerSlice.reducer

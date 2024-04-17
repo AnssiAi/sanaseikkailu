@@ -20,7 +20,7 @@ function Timer() {
         dispatch(decTimer())
       } else {
         dispatch(decStreak())
-        dispatch(resetTimer(30))
+        dispatch(resetTimer())
       }
     }, 1000)
   }, [])

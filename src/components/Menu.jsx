@@ -2,7 +2,7 @@
 function Menu() {
   return (
     <div id='nav'>
-      <h1>Tämä on sanapeli</h1>
+      <h1>Yhdistä sanat</h1>
     </div>
   )
 }
