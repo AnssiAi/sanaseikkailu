@@ -10,7 +10,7 @@ export const scoreSlice = createSlice({
       state.value -= 1
     },
     incByStreak: (state, action) => {
-      state.value += action.payload
+      state.value += 1 + action.payload
     },
   },
 })

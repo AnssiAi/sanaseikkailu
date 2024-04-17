@@ -3,7 +3,7 @@ import { getRandomInt, shuffle } from '../utils'
 import { wordList } from '../wordList'
 import { incByStreak } from './Score/scoreSlice'
 import { incStreak, resetStreak } from './Score/streakSlice'
-import { resetTimer } from './Timer/timerSlice'
+import { createTimer, stopTimer, resetTimer } from './Timer/timerSlice'
 import Timer from './Timer/Timer'
 import Score from './Score/Score'
 import { useSelector, useDispatch } from 'react-redux'
@@ -15,6 +15,10 @@ function GameBoard() {
   const [firstWords, setFirstWords] = useState([])
   const [secondWords, setSecondWords] = useState([])
 
+  const dispatch = useDispatch()
+  const streak = useSelector(state => state.streak.value)
+
+  //Nämä tilaan?
   useEffect(() => {
     const len = wordList.length
 
@@ -49,6 +53,8 @@ function GameBoard() {
 
     setFirstWords(shuffle(fi))
     setSecondWords(shuffle(se))
+
+    dispatch(createTimer(30))
   }, [game])
 
   useEffect(() => {
@@ -56,9 +62,6 @@ function GameBoard() {
       checkMatch()
     }
   }, [first, second])
-
-  const dispatch = useDispatch()
-  const streak = useSelector(state => state.streak.value)
 
   const wordClickHandler = (e, word) => {
     e.preventDefault()
@@ -79,13 +82,13 @@ function GameBoard() {
 
   const checkMatch = () => {
     if (first.match === second.match) {
-      dispatch(resetTimer())
+      dispatch(resetTimer(30))
       dispatch(incByStreak(streak))
       dispatch(incStreak())
       first.complete = true
       second.complete = true
     } else {
-      dispatch(resetTimer())
+      dispatch(resetTimer(30))
       dispatch(resetStreak())
     }
     setFirst(null)
@@ -94,7 +97,13 @@ function GameBoard() {
 
   const newGameHandler = e => {
     e.preventDefault()
+    dispatch(resetTimer(30))
     setGame(game + 1)
+  }
+
+  const endGameHandler = e => {
+    e.preventDefault()
+    dispatch(stopTimer())
   }
 
   return (
@@ -125,6 +134,7 @@ function GameBoard() {
         ))}
       </div>
       <button onClick={e => newGameHandler(e)}>Uusi peli</button>
+      <button onClick={e => endGameHandler(e)}>Lopeta peli</button>
     </>
   )
 }

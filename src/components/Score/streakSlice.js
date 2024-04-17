@@ -10,7 +10,9 @@ export const streakSlice = createSlice({
       state.value += 1
     },
     decStreak: state => {
-      state.value -= 1
+      if (state.value > 0) {
+        state.value -= 1
+      }
     },
     resetStreak: state => {
       state.value = 0
