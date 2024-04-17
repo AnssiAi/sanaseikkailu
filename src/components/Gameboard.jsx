@@ -31,6 +31,7 @@ function GameBoard() {
 
   //Nämä tilaan?
   const setupGame = () => {
+    //Tullaan hakemaan tietokannasta
     const len = wordList.length
 
     let words = []
@@ -84,6 +85,9 @@ function GameBoard() {
   }
 
   const checkMatch = () => {
+    //Haetaan indeksit listalta
+    //Haetaan uusi sana
+    //Asetetaan haettuihin indekseihin
     if (first.match === second.match) {
       dispatch(resetTimer())
       dispatch(incByStreak(streak))
@@ -96,12 +100,6 @@ function GameBoard() {
     }
     setFirst(null)
     setSecond(null)
-  }
-
-  const newGameHandler = e => {
-    e.preventDefault()
-    dispatch(resetTimer())
-    setupGame()
   }
 
   const startGameHandler = e => {
@@ -119,60 +117,60 @@ function GameBoard() {
     setActive(false)
   }
 
-  if (isActive) {
-    return (
-      <>
-        <Timer />
-        <Score />
-        <p>Pelilauta</p>
-        <div id='firstRow'>
-          {firstWords.map(word => (
-            <button
-              key={word.key}
-              disabled={word.complete}
-              onClick={e => wordClickHandler(e, word)}
-            >
-              {word.word}
-            </button>
-          ))}
-        </div>
-        <div id='secondRow'>
-          {secondWords.map(word => (
-            <button
-              key={word.key}
-              disabled={word.complete}
-              onClick={e => wordClickHandler(e, word)}
-            >
-              {word.word}
-            </button>
-          ))}
-        </div>
-        <button onClick={e => endGameHandler(e)}>Lopeta peli</button>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <form
-          onSubmit={e => {
-            startGameHandler(e)
-          }}
-        >
-          <h3>Kielivalinnat tähän</h3>
-          <h3>Valitse ajastin</h3>
-          <div>
-            <input type='radio' name='timer' value='60' />
-            <label>60s</label>
-            <input type='radio' name='timer' value='30' />
-            <label>30s</label>
-            <input type='radio' name='timer' value='15' />
-            <label>15s</label>
+  return (
+    <>
+      {isActive ? (
+        <>
+          <Timer />
+          <Score />
+          <p>Pelilauta</p>
+          <div id='firstRow'>
+            {firstWords.map(word => (
+              <button
+                key={word.key}
+                disabled={word.complete}
+                onClick={e => wordClickHandler(e, word)}
+              >
+                {word.word}
+              </button>
+            ))}
           </div>
-          <button type='submit'>Aloita peli</button>
-        </form>
-      </>
-    )
-  }
+          <div id='secondRow'>
+            {secondWords.map(word => (
+              <button
+                key={word.key}
+                disabled={word.complete}
+                onClick={e => wordClickHandler(e, word)}
+              >
+                {word.word}
+              </button>
+            ))}
+          </div>
+          <button onClick={e => endGameHandler(e)}>Lopeta peli</button>
+        </>
+      ) : (
+        <>
+          <form
+            onSubmit={e => {
+              startGameHandler(e)
+            }}
+          >
+            <h3>Kielivalinnat tähän</h3>
+            <h3>Valitse ajastin</h3>
+            <div>
+              <input type='radio' name='timer' value='60' />
+              <label>60s</label>
+              <input type='radio' name='timer' value='30' />
+              <label>30s</label>
+              <input type='radio' name='timer' value='15' />
+              <label>15s</label>
+            </div>
+            <button type='submit'>Aloita peli</button>
+          </form>
+        </>
+      )}
+    </>
+  )
 }
 
 export default GameBoard
