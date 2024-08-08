@@ -61,31 +61,32 @@ export const getSecureUsers = async (): Promise<SecurePlayerUser[]> => {
 
 //Käytetään parsereita oikean tyypin saamiseksi
 export const getUserById = async (id: string): Promise<PlayerUser> => {
-  const search = (await createDbConnection(userCollection))
+  const result: Promise<PlayerUser> = (await createDbConnection(userCollection))
     .findOne({
       _id: new ObjectId(id),
+    })
+    .then(data => {
+      const result: PlayerUser = toPlayerUser(data);
+      return result;
     })
     .catch(err => {
       throw Error(err);
     });
-  const data = await search;
-  const result: PlayerUser = toPlayerUser(data);
   return result;
 };
 
 export const addPlayerUser = async (
   entry: NewPlayerUser
 ): Promise<PlayerUser> => {
-  const data: Promise<ObjectId> = (await createDbConnection(userCollection))
+  const result: Promise<PlayerUser> = (await createDbConnection(userCollection))
     .insertOne(entry)
-    .then(data => {
-      return data.insertedId;
+    .then(async data => {
+      const result: PlayerUser = await getUserById(data.insertedId.toString());
+      return result;
     })
     .catch(err => {
       throw Error(err);
     });
-  const id: string = (await data).toString();
-  const result: PlayerUser = await getUserById(id);
   return result;
 };
 
