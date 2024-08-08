@@ -1,13 +1,16 @@
-import getAllWords from "../services/mongoService";
 import { Request, Response, Router } from "express";
+import { getAllWords } from "../services/mongoService";
 import { GameWord } from "../../types";
 
 const router: Router = Router();
 
 router.get("/", async (_req: Request, res: Response) => {
   try {
-    const wordList: GameWord[] = await getAllWords("it");
-
+    const itCollection = process.env.IT_COLLECTION_NAME;
+    if (!itCollection) {
+      throw Error("No environment variable for this collection");
+    }
+    const wordList: GameWord[] = await getAllWords(itCollection);
     res.status(200).send(wordList);
   } catch (error: unknown) {
     let errorMessage = "Error: ";

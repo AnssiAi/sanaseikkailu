@@ -1,6 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import itRouter from "./src/routes/itWordRouter";
+import userRouter from "./src/routes/userRouter";
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.get("/ping", (_req, res) => {
 });
 
 app.use("/api/itWords", itRouter);
+app.use("/api/users", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
