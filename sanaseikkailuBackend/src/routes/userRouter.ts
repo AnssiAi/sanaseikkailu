@@ -6,7 +6,7 @@ import {
   getUserById,
   updatePlayerUserPoints,
 } from "../services/mongoService";
-import { NewPlayerUser, PlayerUser, SecurePlayerUser } from "../../types";
+import { NewPlayerUser, SecurePlayerUser } from "../../types";
 import { toNewPlayerUser } from "../../typeParsers";
 
 const router: Router = Router();
@@ -35,7 +35,7 @@ router.post("/", async (_req: Request, res: Response) => {
       throw new Error("Create a unique name");
     }
     const newUser: NewPlayerUser = await toNewPlayerUser(_req.body);
-    const addedUser: PlayerUser = await addPlayerUser(newUser);
+    const addedUser: SecurePlayerUser = await addPlayerUser(newUser);
     res.status(200).send(addedUser);
   } catch (error: unknown) {
     let errorMessage = "Error: ";
@@ -49,7 +49,7 @@ router.post("/", async (_req: Request, res: Response) => {
 router.get("/:id", async (_req: Request, res: Response) => {
   try {
     const id = _req.params.id;
-    const user: PlayerUser = await getUserById(id);
+    const user: SecurePlayerUser = await getUserById(id);
 
     res.status(200).send(user);
   } catch (error: unknown) {
@@ -68,7 +68,7 @@ router.put("/:id", async (_req: Request, res: Response) => {
       throw new Error("Missing points");
     }
     const { points } = _req.body;
-    const user: PlayerUser = await updatePlayerUserPoints(id, points);
+    const user: SecurePlayerUser = await updatePlayerUserPoints(id, points);
 
     res.status(200).send(user);
   } catch (error: unknown) {

@@ -1,12 +1,7 @@
 import "dotenv/config";
 import { Db, MongoClient, Collection, ObjectId } from "mongodb";
-import {
-  GameWord,
-  NewPlayerUser,
-  PlayerUser,
-  SecurePlayerUser,
-} from "../../types";
-import { toPlayerUser } from "../../typeParsers";
+import { GameWord, NewPlayerUser, SecurePlayerUser } from "../../types";
+import { toSecurePlayerUser } from "../../typeParsers";
 
 //Ehtolauseella käsitellään undefined mahdollisuus.
 let connect: string;
@@ -60,13 +55,15 @@ export const getSecureUsers = async (): Promise<SecurePlayerUser[]> => {
 };
 
 //Käytetään parsereita oikean tyypin saamiseksi
-export const getUserById = async (id: string): Promise<PlayerUser> => {
-  const result: Promise<PlayerUser> = (await createDbConnection(userCollection))
+export const getUserById = async (id: string): Promise<SecurePlayerUser> => {
+  const result: Promise<SecurePlayerUser> = (
+    await createDbConnection(userCollection)
+  )
     .findOne({
       _id: new ObjectId(id),
     })
     .then(data => {
-      const result: PlayerUser = toPlayerUser(data);
+      const result: SecurePlayerUser = toSecurePlayerUser(data);
       return result;
     })
     .catch(err => {
@@ -77,11 +74,15 @@ export const getUserById = async (id: string): Promise<PlayerUser> => {
 
 export const addPlayerUser = async (
   entry: NewPlayerUser
-): Promise<PlayerUser> => {
-  const result: Promise<PlayerUser> = (await createDbConnection(userCollection))
+): Promise<SecurePlayerUser> => {
+  const result: Promise<SecurePlayerUser> = (
+    await createDbConnection(userCollection)
+  )
     .insertOne(entry)
     .then(async data => {
-      const result: PlayerUser = await getUserById(data.insertedId.toString());
+      const result: SecurePlayerUser = await getUserById(
+        data.insertedId.toString()
+      );
       return result;
     })
     .catch(err => {
@@ -93,11 +94,13 @@ export const addPlayerUser = async (
 export const updatePlayerUserPoints = async (
   id: string,
   points: number
-): Promise<PlayerUser> => {
-  const result = (await createDbConnection(userCollection))
+): Promise<SecurePlayerUser> => {
+  const result: Promise<SecurePlayerUser> = (
+    await createDbConnection(userCollection)
+  )
     .updateOne({ _id: new ObjectId(id) }, { $set: { points: points } })
     .then(async () => {
-      const updatedPlayer: PlayerUser = await getUserById(id);
+      const updatedPlayer: SecurePlayerUser = await getUserById(id);
       return updatedPlayer;
     })
     .catch(err => {
