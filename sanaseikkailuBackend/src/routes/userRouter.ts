@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+//import jwt from "jsonwebtoken";
 import {
   addPlayerUser,
   verifyUniqueName,
@@ -10,6 +11,24 @@ import { NewPlayerUser, SecurePlayerUser } from "../../types";
 import { toNewPlayerUser } from "../../typeParsers";
 
 const router: Router = Router();
+
+/*
+let secret: string;
+if (process.env.SECRET) {
+  secret = process.env.SECRET;
+} else {
+  throw new Error("SECRET environment variable is not set");
+}
+
+const processToken = (req: Request) => {
+  const auth = req.get("authorization");
+  if (auth && auth.toLowerCase().startsWith("bearer ")) {
+    const token = auth.substring(7);
+    const decodedToken = jwt.verify(token, secret);
+  }
+  throw new Error("malformatted credentials");
+};
+*/
 
 router.get("/", async (_req: Request, res: Response) => {
   try {
@@ -64,9 +83,15 @@ router.get("/:id", async (_req: Request, res: Response) => {
 router.put("/:id", async (_req: Request, res: Response) => {
   try {
     const id = _req.params.id;
+    /*
+    if (!_req.get("authorization")) {
+      throw new Error("Missing credentials");
+    }
+      */
     if (!_req.body.points) {
       throw new Error("Missing points");
     }
+
     const { points } = _req.body;
     const user: SecurePlayerUser = await updatePlayerUserPoints(id, points);
 

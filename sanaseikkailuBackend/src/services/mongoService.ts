@@ -1,7 +1,12 @@
 import "dotenv/config";
 import { Db, MongoClient, Collection, ObjectId } from "mongodb";
-import { GameWord, NewPlayerUser, SecurePlayerUser } from "../../types";
-import { toSecurePlayerUser } from "../../typeParsers";
+import {
+  GameWord,
+  NewPlayerUser,
+  PlayerUser,
+  SecurePlayerUser,
+} from "../../types";
+import { toPlayerUser, toSecurePlayerUser } from "../../typeParsers";
 
 //Ehtolauseella käsitellään undefined mahdollisuus.
 let connect: string;
@@ -64,6 +69,21 @@ export const getUserById = async (id: string): Promise<SecurePlayerUser> => {
     })
     .then(data => {
       const result: SecurePlayerUser = toSecurePlayerUser(data);
+      return result;
+    })
+    .catch(err => {
+      throw Error(err);
+    });
+  return result;
+};
+
+export const getUserByName = async (name: string): Promise<PlayerUser> => {
+  const result: Promise<PlayerUser> = (await createDbConnection(userCollection))
+    .findOne({
+      username: name,
+    })
+    .then(data => {
+      const result: PlayerUser = toPlayerUser(data);
       return result;
     })
     .catch(err => {
