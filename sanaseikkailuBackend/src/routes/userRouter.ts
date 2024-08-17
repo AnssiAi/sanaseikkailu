@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-//import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import {
   addPlayerUser,
   verifyUniqueName,
@@ -7,12 +7,11 @@ import {
   getUserById,
   updatePlayerUserPoints,
 } from "../services/mongoService";
-import { NewPlayerUser, SecurePlayerUser } from "../../types";
+import { LoggedPlayerUser, NewPlayerUser, SecurePlayerUser } from "../../types";
 import { toNewPlayerUser } from "../../typeParsers";
 
 const router: Router = Router();
 
-/*
 let secret: string;
 if (process.env.SECRET) {
   secret = process.env.SECRET;
@@ -20,15 +19,22 @@ if (process.env.SECRET) {
   throw new Error("SECRET environment variable is not set");
 }
 
-const processToken = (req: Request) => {
-  const auth = req.get("authorization");
+const processToken = async (
+  auth: string
+): Promise<string | jwt.JwtPayload | undefined> => {
   if (auth && auth.toLowerCase().startsWith("bearer ")) {
-    const token = auth.substring(7);
-    const decodedToken = jwt.verify(token, secret);
+    const token: string = auth.substring(7);
+    let decodedToken: string | jwt.JwtPayload | undefined;
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        throw new Error(err.message);
+      }
+      decodedToken = decoded;
+    });
+    return decodedToken;
   }
   throw new Error("malformatted credentials");
 };
-*/
 
 router.get("/", async (_req: Request, res: Response) => {
   try {
@@ -46,8 +52,11 @@ router.get("/", async (_req: Request, res: Response) => {
 
 router.post("/", async (_req: Request, res: Response) => {
   try {
-    if (!_req.body.username || !_req.body.password) {
-      throw new Error("Missing username or password");
+    //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla taulukoita
+    const neededKeys: string[] = ["username", "password", "points"];
+    const bodyKeys: string[] = Object.keys(_req.body);
+    if (bodyKeys.every(i => neededKeys.includes(i))) {
+      throw new Error("Missing fields");
     }
     const nameInUse = await verifyUniqueName(_req.body.username);
     if (nameInUse === true) {
@@ -55,7 +64,22 @@ router.post("/", async (_req: Request, res: Response) => {
     }
     const newUser: NewPlayerUser = await toNewPlayerUser(_req.body);
     const addedUser: SecurePlayerUser = await addPlayerUser(newUser);
-    res.status(200).send(addedUser);
+
+    //Kirjaudutaan sisään luodessa käyttäjä
+    const token: string = jwt.sign(
+      {
+        username: addedUser.username,
+      },
+      secret,
+      { expiresIn: 60 * 60 }
+    );
+    const loggedUser: LoggedPlayerUser = {
+      username: addedUser.username,
+      points: addedUser.points,
+      token: token,
+    };
+
+    res.status(200).send(loggedUser);
   } catch (error: unknown) {
     let errorMessage = "Error: ";
     if (error instanceof Error) {
@@ -83,19 +107,20 @@ router.get("/:id", async (_req: Request, res: Response) => {
 router.put("/:id", async (_req: Request, res: Response) => {
   try {
     const id = _req.params.id;
-    /*
-    if (!_req.get("authorization")) {
+    const authHeader = _req.get("authorization");
+    if (!authHeader) {
       throw new Error("Missing credentials");
     }
-      */
     if (!_req.body.points) {
       throw new Error("Missing points");
     }
 
-    const { points } = _req.body;
-    const user: SecurePlayerUser = await updatePlayerUserPoints(id, points);
-
-    res.status(200).send(user);
+    const authorized = await processToken(authHeader);
+    if (authorized) {
+      const { points } = _req.body;
+      const user: SecurePlayerUser = await updatePlayerUserPoints(id, points);
+      res.status(200).send(user);
+    }
   } catch (error: unknown) {
     let errorMessage = "Error: ";
     if (error instanceof Error) {

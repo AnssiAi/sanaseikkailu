@@ -29,7 +29,8 @@ router.post("/", async (_req: Request, res: Response) => {
         {
           username: foundUser.username,
         },
-        secret
+        secret,
+        { expiresIn: 60 * 60 }
       );
 
       const loggedUser: LoggedPlayerUser = {
