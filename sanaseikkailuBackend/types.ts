@@ -19,3 +19,9 @@ export interface LoggedPlayerUser {
 
 export type SecurePlayerUser = Omit<PlayerUser, "id" | "password">;
 export type NewPlayerUser = Omit<PlayerUser, "id">;
+
+export enum UserParameters {
+  USERNAME = "username",
+  PASSWORD = "password",
+  POINTS = "points",
+}

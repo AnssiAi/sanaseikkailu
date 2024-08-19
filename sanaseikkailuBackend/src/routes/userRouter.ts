@@ -7,7 +7,12 @@ import {
   getUserById,
   updatePlayerUserPoints,
 } from "../services/mongoService";
-import { LoggedPlayerUser, NewPlayerUser, SecurePlayerUser } from "../../types";
+import {
+  LoggedPlayerUser,
+  NewPlayerUser,
+  SecurePlayerUser,
+  UserParameters,
+} from "../../types";
 import { toNewPlayerUser } from "../../typeParsers";
 
 const router: Router = Router();
@@ -52,13 +57,12 @@ router.get("/", async (_req: Request, res: Response) => {
 
 router.post("/", async (_req: Request, res: Response) => {
   try {
-    //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla taulukoita
-    const neededKeys: string[] = ["username", "password", "points"];
+    //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla enumiin
     const bodyKeys: string[] = Object.keys(_req.body);
-    if (bodyKeys.every(i => neededKeys.includes(i))) {
+    if (bodyKeys.every(i => i in UserParameters)) {
       throw new Error("Missing fields");
     }
-    const nameInUse = await verifyUniqueName(_req.body.username);
+    const nameInUse: boolean = await verifyUniqueName(_req.body.username);
     if (nameInUse === true) {
       throw new Error("Create a unique name");
     }
