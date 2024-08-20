@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GameSelect from "./components/GameSelect";
+import LoginForm from "./components/LoginForm";
 //import MatchGameSetup from "./components/MatchGame/MatchGameSetup";
 
 const MatchGameSetup = lazy(
@@ -12,6 +13,7 @@ function App() {
     <>
       <div className="App">
         <div className="Container">
+          <LoginForm />
           <Router>
             <Routes>
               <Route path="/" element={<GameSelect />} />

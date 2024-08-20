@@ -22,7 +22,7 @@ const MatchGame = ({ gameSettings }: { gameSettings: GameSettings }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [gameSettings.list]);
 
   return (
     <>
