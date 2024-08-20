@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-
+//Linkit eri peleihin
 const GameSelect = () => {
   return (
     <>
