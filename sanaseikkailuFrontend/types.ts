@@ -1,7 +1,7 @@
 export interface GameSettings {
   hostLanguage: string;
   studyLanguage: string;
-  list: string;
+  gameTime: number;
 }
 
 export interface LoginData {
@@ -24,6 +24,10 @@ export interface LoggedPlayerUser {
   username: string;
   points: number;
   token: string;
+}
+export interface Timer {
+  seconds: number;
+  minutes: number;
 }
 
 export type SecurePlayerUser = Omit<PlayerUser, "id" | "password">;

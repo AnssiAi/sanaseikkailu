@@ -25,10 +25,9 @@ if (process.env.SECRET) {
 }
 
 const processToken = async (
-  auth: string
+  token: string
 ): Promise<string | jwt.JwtPayload | undefined> => {
-  if (auth && auth.toLowerCase().startsWith("bearer ")) {
-    const token: string = auth.substring(7);
+  if (token) {
     let decodedToken: string | jwt.JwtPayload | undefined;
     jwt.verify(token, secret, (err, decoded) => {
       if (err) {
@@ -108,21 +107,25 @@ router.get("/:id", async (_req: Request, res: Response) => {
   }
 });
 
-router.put("/:id", async (_req: Request, res: Response) => {
+router.put("/", async (_req: Request, res: Response) => {
   try {
+    /* Frontend ei saa id:tä. Käytetään uniikkeja käyttäjänimiä päivitykseen
     const id = _req.params.id;
-    const authHeader = _req.get("authorization");
     if (!authHeader) {
       throw new Error("Missing credentials");
     }
-    if (!_req.body.points) {
-      throw new Error("Missing points");
+      */
+    if (!_req.body.username || !_req.body.points || !_req.body.token) {
+      throw new Error("Missing fields");
     }
 
-    const authorized = await processToken(authHeader);
+    const authorized = await processToken(_req.body.token);
     if (authorized) {
-      const { points } = _req.body;
-      const user: SecurePlayerUser = await updatePlayerUserPoints(id, points);
+      const { username, points } = _req.body;
+      const user: SecurePlayerUser = await updatePlayerUserPoints(
+        username,
+        points
+      );
       res.status(200).send(user);
     }
   } catch (error: unknown) {

@@ -112,15 +112,17 @@ export const addPlayerUser = async (
 };
 
 export const updatePlayerUserPoints = async (
-  id: string,
+  name: string,
   points: number
 ): Promise<SecurePlayerUser> => {
   const result: Promise<SecurePlayerUser> = (
     await createDbConnection(userCollection)
   )
-    .updateOne({ _id: new ObjectId(id) }, { $set: { points: points } })
+    .updateOne({ username: name }, { $set: { points: points } })
     .then(async () => {
-      const updatedPlayer: SecurePlayerUser = await getUserById(id);
+      const updatedPlayer: SecurePlayerUser = toSecurePlayerUser(
+        await getUserByName(name)
+      );
       return updatedPlayer;
     })
     .catch(err => {

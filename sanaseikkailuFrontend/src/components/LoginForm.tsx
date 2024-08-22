@@ -8,10 +8,12 @@ const LoginForm = () => {
     password: "",
   });
 
+  //Käytetään localstoragea toistaiseksi kirjautumistietojen hallintaan.
   const submitLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
       const user: LoggedPlayerUser = await userLogin(loginData);
+      localStorage.setItem("userName", user.username);
       localStorage.setItem("userToken", user.token);
       alert(`Logged in as ${user.username}`);
     } catch (err: unknown) {

@@ -1,36 +1,46 @@
 import { useEffect, useState } from "react";
-import { getWordsFromCollection } from "../../services/wordService";
 import { GameSettings, GameWord } from "../../../types";
-//Haetaan sanat
+import { getRandomInt } from "../../utils";
+import { useTimer } from "../../hooks/useTimer";
 
-const MatchGame = ({ gameSettings }: { gameSettings: GameSettings }) => {
-  const [wordData, setWordData] = useState<GameWord[]>([]);
+//Ajastin
+//Pisteet
+//Pelin lopetus
+const MatchGame = ({
+  gameSettings,
+  wordList,
+}: {
+  gameSettings: GameSettings;
+  wordList: GameWord[];
+}) => {
+  const [gameWords, setGameWords] = useState<GameWord[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: GameWord[] = await getWordsFromCollection(
-          gameSettings.list
-        );
-        setWordData(data);
-      } catch (err: unknown) {
-        let errorMessage: string = "Error: ";
-        if (err instanceof Error) {
-          errorMessage += err.message;
-        }
-        console.log(errorMessage);
+    const setupGame = () => {
+      const len: number = wordList.length;
+      let list: GameWord[] = [];
+      for (let i = 0; i < 5; i++) {
+        const randWord: GameWord = wordList[getRandomInt(len)];
+        list = list.concat(randWord);
       }
+      setGameWords(list);
     };
-    fetchData();
-  }, [gameSettings.list]);
+    setupGame();
+  }, [wordList]);
+  const { seconds, minutes } = useTimer(gameSettings.gameTime);
 
   return (
     <>
       <div>
-        <p>MatchGame</p>
-        {wordData ? (
+        {gameWords ? (
           <>
-            <p>Sanoja: {wordData.length}</p>
+            <h2>
+              {("0" + minutes).slice(-2)}:{("0" + seconds).slice(-2)}
+            </h2>
+            <p>MatchGame</p>
+            {gameWords.map((word, index) => (
+              <p key={index}>{word.en}</p>
+            ))}
           </>
         ) : (
           <p>Loading...</p>

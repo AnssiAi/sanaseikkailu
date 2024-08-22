@@ -4,9 +4,7 @@ import GameSelect from "./components/GameSelect";
 import LoginForm from "./components/LoginForm";
 //import MatchGameSetup from "./components/MatchGame/MatchGameSetup";
 
-const MatchGameSetup = lazy(
-  () => import("./components/MatchGame/MatchGameSetup")
-);
+const GameSetup = lazy(() => import("./components/GameSetup"));
 
 function App() {
   return (
@@ -21,7 +19,7 @@ function App() {
                 path="/matchgame"
                 element={
                   <Suspense fallback={<p>Loading...</p>}>
-                    <MatchGameSetup />
+                    <GameSetup game="matchGame" />
                   </Suspense>
                 }
               />
