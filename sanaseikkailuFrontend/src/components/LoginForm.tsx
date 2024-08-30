@@ -1,23 +1,28 @@
-import { useState } from "react";
-import { LoggedPlayerUser, LoginData } from "../../types";
-import { userLogin } from "../services/loginService";
+import { useContext, useState } from 'react';
+import { LoggedPlayerUser, LoginData, UserData } from '../../types';
+import { userLogin } from '../services/loginService';
+import { UserContext } from '../App';
 
-const LoginForm = () => {
+interface LoginProps {
+  setUser: React.Dispatch<React.SetStateAction<UserData>>;
+}
+
+const LoginForm = ({ setUser }: LoginProps) => {
+  const user = useContext(UserContext);
   const [loginData, setLoginData] = useState<LoginData>({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   //Käytetään localstoragea toistaiseksi kirjautumistietojen hallintaan.
   const submitLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const user: LoggedPlayerUser = await userLogin(loginData);
-      localStorage.setItem("userName", user.username);
-      localStorage.setItem("userToken", user.token);
-      alert(`Logged in as ${user.username}`);
+      const login: LoggedPlayerUser = await userLogin(loginData);
+      setUser(login);
+      alert(`Logged in as ${login.username}`);
     } catch (err: unknown) {
-      let errorMessage: string = "Error: ";
+      let errorMessage: string = 'Error: ';
       if (err instanceof Error) {
         errorMessage += err.message;
       }
@@ -38,35 +43,44 @@ const LoginForm = () => {
   };
 
   const clearFormData = () => {
-    setLoginData({ username: "", password: "" });
+    setLoginData({ username: '', password: '' });
   };
 
   const logOut = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    localStorage.removeItem("userToken");
-    alert("Logged out");
+    setUser(null);
+    alert('Logged out');
   };
 
   return (
     <div>
-      <form onSubmit={submitLogin}>
-        <label>username:</label>
-        <input
-          type="text"
-          name="username"
-          value={loginData.username}
-          onChange={handleFormUpdate}
-        />
-        <label>password:</label>
-        <input
-          type="text"
-          name="password"
-          value={loginData.password}
-          onChange={handleFormUpdate}
-        />
-        <button type="submit">Login</button>
-      </form>
-      <button onClick={logOut}>Logout</button>
+      {user ? (
+        <>
+          <p>{user.username}</p>
+          <p>{user.points}</p>
+          <button onClick={logOut}>Logout</button>
+        </>
+      ) : (
+        <>
+          <form onSubmit={submitLogin}>
+            <label>username:</label>
+            <input
+              type='text'
+              name='username'
+              value={loginData.username}
+              onChange={handleFormUpdate}
+            />
+            <label>password:</label>
+            <input
+              type='text'
+              name='password'
+              value={loginData.password}
+              onChange={handleFormUpdate}
+            />
+            <button type='submit'>Login</button>
+          </form>
+        </>
+      )}
     </div>
   );
 };

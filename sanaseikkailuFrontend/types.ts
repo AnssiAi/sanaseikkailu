@@ -30,5 +30,6 @@ export interface Timer {
   minutes: number;
 }
 
-export type SecurePlayerUser = Omit<PlayerUser, "id" | "password">;
-export type NewPlayerUser = Omit<PlayerUser, "id">;
+export type UserData = LoggedPlayerUser | null;
+export type SecurePlayerUser = Omit<PlayerUser, 'id' | 'password'>;
+export type NewPlayerUser = Omit<PlayerUser, 'id'>;
