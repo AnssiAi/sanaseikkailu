@@ -26,10 +26,15 @@ export interface LoggedPlayerUser {
   token: string;
 }
 export interface Timer {
+  total: number;
   seconds: number;
   minutes: number;
 }
 
 export type UserData = LoggedPlayerUser | null;
+export type UserObject = {
+  user: UserData;
+  setUser: (u: UserData) => void;
+};
 export type SecurePlayerUser = Omit<PlayerUser, 'id' | 'password'>;
 export type NewPlayerUser = Omit<PlayerUser, 'id'>;

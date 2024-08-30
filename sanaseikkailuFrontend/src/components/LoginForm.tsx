@@ -1,14 +1,10 @@
 import { useContext, useState } from 'react';
-import { LoggedPlayerUser, LoginData, UserData } from '../../types';
+import { LoggedPlayerUser, LoginData } from '../../types';
 import { userLogin } from '../services/loginService';
 import { UserContext } from '../App';
 
-interface LoginProps {
-  setUser: React.Dispatch<React.SetStateAction<UserData>>;
-}
-
-const LoginForm = ({ setUser }: LoginProps) => {
-  const user = useContext(UserContext);
+const LoginForm = () => {
+  const { user, setUser } = useContext(UserContext);
   const [loginData, setLoginData] = useState<LoginData>({
     username: '',
     password: '',

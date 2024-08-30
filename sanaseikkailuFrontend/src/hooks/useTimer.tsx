@@ -21,6 +21,7 @@ export const useTimer = (gameTime: number): Timer => {
   }, []);
 
   return {
+    total: timer,
     seconds: Math.floor((timer / second) % 60),
     minutes: Math.floor((timer / minute) % 60),
   };
