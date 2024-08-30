@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { Timer } from "../../types";
+import { useState, useEffect } from 'react';
+import { Timer } from '../../types';
 
-//Palautetaan aika objekti komponentin sijasta?
 const second: number = 1000;
 const minute: number = second * 60;
 //Lasketaan millisekunneissa
