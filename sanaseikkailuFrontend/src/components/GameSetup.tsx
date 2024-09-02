@@ -1,21 +1,26 @@
-import { useState, useEffect } from "react";
-import MatchGame from "./MatchGame/MatchGame";
-import { GameSettings, GameWord } from "../../types";
-import { getWordsFromCollection } from "../services/wordService";
-import { checkString } from "../utils";
-//Sanastojen haku. On vain yksi sanasto joten käytetään placeholderia
-//Sanasto nimi = hakureitin nimi
-const wordLists: string[] = ["itWords"];
+import { useState, useEffect } from 'react';
+import MatchGame from './MatchGame/MatchGame';
+import { GameSettings, GameWord } from '../../types';
+import { getWordCollections } from '../services/collectionService';
+import { getWordsFromCollection } from '../services/wordService';
+import { checkString } from '../utils';
+
+//Muuttujat peliajan valitsemiseksi
+//const shortGame: number = 60;
+const medGame: number = 120;
+//const longGame: number = 180;
+
+const collections: string[] = await getWordCollections();
 
 //Kielivalinta - Valinnat sulkemaan toisensa pois
 const GameSetup = ({ game }: { game: string }) => {
   const [wordList, setWordList] = useState<GameWord[]>([]);
-  const [selectedList, setSelectedList] = useState<string>("itWords");
+  const [selectedList, setSelectedList] = useState<string>(collections[0]);
   const [formComplete, setFormComplete] = useState<boolean>(false);
   const [settings, setSettings] = useState<GameSettings>({
-    hostLanguage: "",
-    studyLanguage: "",
-    gameTime: 120,
+    hostLanguage: '',
+    studyLanguage: '',
+    gameTime: medGame,
   });
 
   useEffect(() => {
@@ -24,7 +29,7 @@ const GameSetup = ({ game }: { game: string }) => {
         const data: GameWord[] = await getWordsFromCollection(selectedList);
         setWordList(data);
       } catch (err: unknown) {
-        let errorMessage: string = "Error: ";
+        let errorMessage: string = 'Error: ';
         if (err instanceof Error) {
           errorMessage += err.message;
         }
@@ -42,7 +47,7 @@ const GameSetup = ({ game }: { game: string }) => {
     if (checkHost && checkStudy) {
       setFormComplete(!formComplete);
     } else {
-      alert("Choose two languages");
+      alert('Choose two languages');
     }
   };
   const handleFormInput = (e: React.SyntheticEvent) => {
@@ -57,13 +62,13 @@ const GameSetup = ({ game }: { game: string }) => {
   };
   const handleListChange = (e: React.SyntheticEvent) => {
     e.preventDefault;
-    if (e.target instanceof HTMLSelectElement) {
+    if (e.target instanceof HTMLInputElement) {
       setSelectedList(e.target.value);
     }
   };
   const getGameComponent = () => {
     switch (game) {
-      case "matchGame":
+      case 'matchGame':
         return <MatchGame gameSettings={settings} wordList={wordList} />;
       default:
         return null;
@@ -76,33 +81,40 @@ const GameSetup = ({ game }: { game: string }) => {
           getGameComponent()
         ) : (
           <>
+            <fieldset>
+              {collections.map((name, index) => (
+                <div className='wordListTag' key={index}>
+                  <input
+                    className='wordListInput'
+                    type='radio'
+                    name='listSelect'
+                    value={name}
+                    onChange={handleListChange}
+                  />
+                  <label>{name}</label>
+                </div>
+              ))}
+            </fieldset>
             <form onSubmit={handleSubmit}>
               <select
-                name="hostLanguage"
+                name='hostLanguage'
                 onChange={handleFormInput}
                 value={settings.hostLanguage}
               >
-                <option value="fin">Suomi</option>
-                <option value="en">Englanti</option>
-                <option value="sve">Ruotsi</option>
+                <option value='fin'>Suomi</option>
+                <option value='en'>Englanti</option>
+                <option value='sve'>Ruotsi</option>
               </select>
               <select
-                name="studyLanguage"
+                name='studyLanguage'
                 onChange={handleFormInput}
                 value={settings.studyLanguage}
               >
-                <option value="fin">Suomi</option>
-                <option value="en">Englanti</option>
-                <option value="sve">Ruotsi</option>
+                <option value='fin'>Suomi</option>
+                <option value='en'>Englanti</option>
+                <option value='sve'>Ruotsi</option>
               </select>
-              <select name="list" onChange={handleListChange}>
-                {wordLists.map((list, index) => (
-                  <option key={index} value={list}>
-                    {list}
-                  </option>
-                ))}
-              </select>
-              <button type="submit">start game</button>
+              <button type='submit'>start game</button>
             </form>
           </>
         )}

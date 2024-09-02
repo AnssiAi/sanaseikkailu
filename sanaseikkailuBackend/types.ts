@@ -17,11 +17,15 @@ export interface LoggedPlayerUser {
   token: string;
 }
 
-export type SecurePlayerUser = Omit<PlayerUser, "id" | "password">;
-export type NewPlayerUser = Omit<PlayerUser, "id">;
+export type SecurePlayerUser = Omit<PlayerUser, 'id' | 'password'>;
+export type NewPlayerUser = Omit<PlayerUser, 'id'>;
 
 export enum UserParameters {
-  USERNAME = "username",
-  PASSWORD = "password",
-  POINTS = "points",
+  USERNAME = 'username',
+  PASSWORD = 'password',
+  POINTS = 'points',
+}
+
+export enum AllowedCollections {
+  IT = 'it',
 }
