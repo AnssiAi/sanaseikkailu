@@ -9,11 +9,19 @@ export interface LoginData {
   password: string;
 }
 
+//Key tyyppiä ei tarvitse määritellä kuin kerran tyyppiä kohden
+//Kaikki keyt on string, yksi määrittely riittää
 export interface GameWord {
-  fin: string;
+  [fin: string]: string;
   sve: string;
   en: string;
 }
+
+export interface MatchWord {
+  word: string;
+  matchKey: string;
+}
+
 export interface PlayerUser {
   id: string;
   username: string;
@@ -32,9 +40,11 @@ export interface Timer {
 }
 
 export type UserData = LoggedPlayerUser | null;
+
 export type UserObject = {
   user: UserData;
   setUser: (u: UserData) => void;
 };
+
 export type SecurePlayerUser = Omit<PlayerUser, 'id' | 'password'>;
 export type NewPlayerUser = Omit<PlayerUser, 'id'>;

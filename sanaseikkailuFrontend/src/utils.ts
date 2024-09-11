@@ -1,4 +1,4 @@
-import { GameWord } from "../types";
+import { MatchWord } from '../types';
 
 //Satunnais Integer luominen
 export const getRandomInt = (max: number): number => {
@@ -6,7 +6,7 @@ export const getRandomInt = (max: number): number => {
 };
 
 //Array sekoitus
-export const shuffle = (array: GameWord[]) => {
+export const shuffle = (array: MatchWord[]) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
@@ -17,7 +17,7 @@ export const shuffle = (array: GameWord[]) => {
 };
 
 const isString = (text: unknown): text is string => {
-  return typeof text === "string" || text instanceof String;
+  return typeof text === 'string' || text instanceof String;
 };
 
 export const checkString = (value: unknown): boolean => {
