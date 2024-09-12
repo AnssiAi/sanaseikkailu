@@ -18,8 +18,8 @@ const GameSetup = ({ game }: { game: string }) => {
   const [selectedList, setSelectedList] = useState<string>(collections[0]);
   const [formComplete, setFormComplete] = useState<boolean>(false);
   const [settings, setSettings] = useState<GameSettings>({
-    hostLanguage: '',
-    studyLanguage: '',
+    hostLanguage: 'fin',
+    studyLanguage: 'en',
     gameTime: medGame,
   });
 
@@ -47,7 +47,7 @@ const GameSetup = ({ game }: { game: string }) => {
     if (checkHost && checkStudy) {
       setFormComplete(!formComplete);
     } else {
-      alert('Choose two languages');
+      alert('Valitse kaksi kieltä');
     }
   };
   const handleFormInput = (e: React.SyntheticEvent) => {

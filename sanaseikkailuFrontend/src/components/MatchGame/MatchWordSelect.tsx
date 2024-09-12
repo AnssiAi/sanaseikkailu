@@ -1,26 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { WordContext } from './MatchGame';
 
 interface MatchWordSelectProps {
   list: string;
   handleSelect: (key: string, list: string) => void;
 }
-//Sana
-//Match
-//Tapahtumakäsittelijä, pääkomponentti check
-const MatchWordSelect = ({ list, handleSelect }: MatchWordSelectProps) => {
-  const { word, matchKey } = useContext(WordContext);
-  const [value, setValue] = useState<string>(word);
-  const [isComplete, setComplete] = useState<boolean>(true);
 
-  //Kun sana vaihtuu kontekstissa
-  //Odotetaan 3s, Vaihdetaan näkyvä sana, Asetetaan takaisin aktiiviseksi
-  useEffect(() => {
-    setComplete(!isComplete);
-    setTimeout(() => {
-      setValue(word);
-    }, 3000);
-  }, [word]);
+const MatchWordSelect = ({ list, handleSelect }: MatchWordSelectProps) => {
+  const { word, matchKey, complete } = useContext(WordContext);
+  //Tila hallitsemaan ilmettä?
 
   const handleClick = (e: React.SyntheticEvent) => {
     e.preventDefault;
@@ -29,8 +17,8 @@ const MatchWordSelect = ({ list, handleSelect }: MatchWordSelectProps) => {
   return (
     <input
       type='button'
-      disabled={isComplete}
-      value={value}
+      disabled={complete}
+      value={word}
       onClick={handleClick}
     />
   );

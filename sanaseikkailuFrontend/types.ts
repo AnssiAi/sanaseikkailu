@@ -20,6 +20,7 @@ export interface GameWord {
 export interface MatchWord {
   word: string;
   matchKey: string;
+  complete: boolean;
 }
 
 export interface PlayerUser {
