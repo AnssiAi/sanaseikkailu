@@ -16,6 +16,7 @@ const MatchWordSelect = ({ list, handleSelect }: MatchWordSelectProps) => {
   };
   return (
     <input
+      id='matchInput'
       type='button'
       disabled={complete}
       value={word}

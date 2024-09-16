@@ -76,27 +76,31 @@ const GameSetup = ({ game }: { game: string }) => {
   };
   return (
     <>
-      <div>
+      <div id='gameContent'>
         {formComplete ? (
           getGameComponent()
         ) : (
           <>
-            <fieldset>
+            <fieldset id='tagSet'>
+              <legend>Sanastot</legend>
               {collections.map((name, index) => (
-                <div className='wordListTag' key={index}>
+                <div key={index}>
                   <input
-                    className='wordListInput'
+                    id={'tag' + index}
                     type='radio'
                     name='listSelect'
                     value={name}
                     onChange={handleListChange}
                   />
-                  <label>{name}</label>
+                  <label id='tagLabel' htmlFor={'tag' + index}>
+                    {name}
+                  </label>
                 </div>
               ))}
             </fieldset>
             <form onSubmit={handleSubmit}>
               <select
+                id='select'
                 name='hostLanguage'
                 onChange={handleFormInput}
                 value={settings.hostLanguage}
@@ -106,6 +110,7 @@ const GameSetup = ({ game }: { game: string }) => {
                 <option value='sve'>Ruotsi</option>
               </select>
               <select
+                id='select'
                 name='studyLanguage'
                 onChange={handleFormInput}
                 value={settings.studyLanguage}
@@ -114,7 +119,9 @@ const GameSetup = ({ game }: { game: string }) => {
                 <option value='en'>Englanti</option>
                 <option value='sve'>Ruotsi</option>
               </select>
-              <button type='submit'>start game</button>
+              <button id='submitBtn' type='submit'>
+                start game
+              </button>
             </form>
           </>
         )}

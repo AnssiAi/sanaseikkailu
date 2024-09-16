@@ -1,16 +1,132 @@
 body {
-  margin: 0%;
-  padding: 0%;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --input-primary: #101014;
+  --input-secondary: #4d7fc9;
+  --input-disabled: #9293a5;
+
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .App {
   display: grid;
   grid-template-columns: 10% auto 10%;
-  grid-template-rows: min-content auto;
+  grid-template-rows: 50px auto;
 }
 
 .Container {
   grid-column: 2;
   grid-row: 2;
+  display: grid;
+  justify-items: center;
+}
+
+input[type='text'] {
+  border-radius: 5px;
+  width: 250px;
+  height: 25px;
+}
+
+#nav {
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: span 3;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--input-disabled);
+}
+#userContent {
+  position: absolute;
+  padding: 15px;
+  background-color: var(--input-disabled);
+  border-radius: 15px;
+}
+
+#userContent form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type='radio'] {
+  visibility: hidden;
+  height: 0;
+  width: 0;
+}
+
+#tagLabel {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.5em 2em;
+  border-radius: 25px;
+  background-color: #cbcbcf;
+}
+input[type='radio']:hover + #tagLabel {
+  background-color: #4d7fc9;
+}
+input[type='radio']:checked + #tagLabel {
+  background-color: #4d7fc9;
+}
+
+#matchGame {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 10% auto;
+  column-gap: 10px;
+  row-gap: 10px;
+  padding: 5%;
+}
+#scoreCard {
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: span 2;
+  justify-self: center;
+}
+
+#hostList {
+  grid-row: 2;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+}
+#studyList {
+  grid-row: 2;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+}
+
+#tagSet {
+  border-radius: 10px;
+  align-items: center;
+}
+
+#select {
+  width: 10em;
+  height: 5em;
+  border-radius: 10px;
+}
+
+#submitBtn {
+  width: 10em;
+  height: 5em;
+  border-radius: 10px;
+}
+
+#matchInput {
+  width: 10em;
+  height: 5em;
+  border-radius: 10px;
+  margin: 5px;
+  text-wrap: wrap;
+}
+#matchInput:hover {
+  scale: 105%;
+}
+#matchInput:active {
+  scale: 95%;
 }

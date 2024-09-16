@@ -16,9 +16,12 @@ function App() {
   return (
     <>
       <div className='App'>
-        <div className='Container'>
-          <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser }}>
+          <div id='nav'>
+            <h3>Sanaseikkailu</h3>
             <LoginForm />
+          </div>
+          <div className='Container'>
             <Router>
               <Routes>
                 <Route path='/' element={<GameSelect />} />
@@ -32,8 +35,8 @@ function App() {
                 />
               </Routes>
             </Router>
-          </UserContext.Provider>
-        </div>
+          </div>
+        </UserContext.Provider>
       </div>
     </>
   );

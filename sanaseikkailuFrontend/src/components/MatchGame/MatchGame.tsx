@@ -68,7 +68,7 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
     }
   }, [hostSelect, studySelect]);
 
-  //Populoidaan listat uudelleen
+  //Populoidaan listat uudelleen available listojen avulla
   useEffect(() => {
     if (hostAvailable.length > 0 && studyAvailable.length > 0) {
       const timeoutId = setTimeout(() => {
@@ -222,24 +222,26 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
 
   return (
     <>
-      <div>
+      <div id='matchGame'>
         {gameActive ? (
           <>
-            <h2>
-              {('0' + minutes).slice(-2)}:{('0' + seconds).slice(-2)}
-            </h2>
-            <h3>
-              Pisteet: {score} Putki: {streak}
-            </h3>
-            <p>MatchGame</p>
-            <div>
+            <div id='scoreCard'>
+              <h2>MatchGame</h2>
+              <h2>
+                {('0' + minutes).slice(-2)}:{('0' + seconds).slice(-2)}
+              </h2>
+              <h3>
+                Pisteet: {score} Putki: {streak}
+              </h3>
+            </div>
+            <div id='hostList'>
               {hostWords.map((word, index) => (
                 <WordContext.Provider value={word} key={index}>
                   <MatchWordSelect list='host' handleSelect={handleSelect} />
                 </WordContext.Provider>
               ))}
             </div>
-            <div>
+            <div id='studyList'>
               {studyWords.map((word, index) => (
                 <WordContext.Provider value={word} key={index}>
                   <MatchWordSelect list='study' handleSelect={handleSelect} />

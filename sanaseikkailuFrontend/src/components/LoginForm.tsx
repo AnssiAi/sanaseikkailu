@@ -9,6 +9,7 @@ const LoginForm = () => {
     username: '',
     password: '',
   });
+  const [visible, setVisible] = useState<boolean>(false);
 
   //Käytetään localstoragea toistaiseksi kirjautumistietojen hallintaan.
   const submitLogin = async (e: React.SyntheticEvent) => {
@@ -48,33 +49,57 @@ const LoginForm = () => {
     alert('Logged out');
   };
 
+  const toggleVisibility = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setVisible(!visible);
+  };
+
   return (
-    <div>
-      {user ? (
+    <div id='loginContainer'>
+      {visible ? (
         <>
-          <p>{user.username}</p>
-          <p>{user.points}</p>
-          <button onClick={logOut}>Logout</button>
+          <button id='userBtn' onClick={toggleVisibility}>
+            <span>
+              <img src='src\assets\icons\login.svg' height={35} width={35} />
+            </span>
+          </button>
+          <div id='userContent'>
+            {user ? (
+              <>
+                <p>{user.username}</p>
+                <p>{user.points}</p>
+                <button onClick={logOut}>Logout</button>
+              </>
+            ) : (
+              <>
+                <form onSubmit={submitLogin}>
+                  <label>Username:</label>
+                  <input
+                    type='text'
+                    name='username'
+                    value={loginData.username}
+                    onChange={handleFormUpdate}
+                  />
+                  <label>Password:</label>
+                  <input
+                    type='text'
+                    name='password'
+                    value={loginData.password}
+                    onChange={handleFormUpdate}
+                  />
+                  <button type='submit'>Login</button>
+                </form>
+              </>
+            )}
+          </div>
         </>
       ) : (
         <>
-          <form onSubmit={submitLogin}>
-            <label>username:</label>
-            <input
-              type='text'
-              name='username'
-              value={loginData.username}
-              onChange={handleFormUpdate}
-            />
-            <label>password:</label>
-            <input
-              type='text'
-              name='password'
-              value={loginData.password}
-              onChange={handleFormUpdate}
-            />
-            <button type='submit'>Login</button>
-          </form>
+          <button id='userBtn' onClick={toggleVisibility}>
+            <span>
+              <img src='src\assets\icons\login.svg' height={35} width={35} />
+            </span>
+          </button>
         </>
       )}
     </div>
