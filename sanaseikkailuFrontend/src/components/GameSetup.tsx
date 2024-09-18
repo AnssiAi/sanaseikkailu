@@ -76,15 +76,15 @@ const GameSetup = ({ game }: { game: string }) => {
   };
   return (
     <>
-      <div id='gameContent'>
+      <div className='gameContainer'>
         {formComplete ? (
           getGameComponent()
         ) : (
           <>
-            <fieldset id='tagSet'>
+            <fieldset className='tagSet'>
               <legend>Sanastot</legend>
               {collections.map((name, index) => (
-                <div key={index}>
+                <div key={index} className='tagSelector'>
                   <input
                     id={'tag' + index}
                     type='radio'
@@ -92,15 +92,14 @@ const GameSetup = ({ game }: { game: string }) => {
                     value={name}
                     onChange={handleListChange}
                   />
-                  <label id='tagLabel' htmlFor={'tag' + index}>
+                  <label className='tagLabel' htmlFor={'tag' + index}>
                     {name}
                   </label>
                 </div>
               ))}
             </fieldset>
-            <form onSubmit={handleSubmit}>
+            <form className='setupForm' onSubmit={handleSubmit}>
               <select
-                id='select'
                 name='hostLanguage'
                 onChange={handleFormInput}
                 value={settings.hostLanguage}
@@ -110,7 +109,6 @@ const GameSetup = ({ game }: { game: string }) => {
                 <option value='sve'>Ruotsi</option>
               </select>
               <select
-                id='select'
                 name='studyLanguage'
                 onChange={handleFormInput}
                 value={settings.studyLanguage}
@@ -119,7 +117,7 @@ const GameSetup = ({ game }: { game: string }) => {
                 <option value='en'>Englanti</option>
                 <option value='sve'>Ruotsi</option>
               </select>
-              <button id='submitBtn' type='submit'>
+              <button className='submitBtn' type='submit'>
                 start game
               </button>
             </form>

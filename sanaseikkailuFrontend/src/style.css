@@ -1,76 +1,303 @@
-body {
-  --input-primary: #101014;
-  --input-secondary: #4d7fc9;
-  --input-disabled: #9293a5;
-
+/*CSS reset*/
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+/*Colors*/
+html {
+  --color-dark: #0e1819;
+  --color-light: #f6f6f6;
+  --color-main: #4fb477;
+  --main-dark: #345511;
+  --main-active: #419964;
+  --main-disabled: #9ab1a3;
+  --body-background: #e6eae2;
+  --game-background: #f6f6f6;
+}
+
+/*Base*/
+body {
+  min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--body-background);
 }
 
-.App {
+.app {
   display: grid;
-  grid-template-columns: 10% auto 10%;
-  grid-template-rows: 50px auto;
+  grid-template-columns: 10vw auto 10vw;
+  grid-template-rows: 7vh auto;
+  min-height: 100vh;
 }
 
-.Container {
+.container {
   grid-column: 2;
   grid-row: 2;
   display: grid;
   justify-items: center;
+  background-color: var(--game-background);
 }
-
+.appTitle {
+  color: var(--text-light);
+}
 input[type='text'] {
   border-radius: 5px;
-  width: 250px;
-  height: 25px;
+  width: 20em;
+  height: 2em;
 }
 
-#nav {
+/*Nav*/
+.nav {
   grid-row: 1;
   grid-column-start: 1;
   grid-column-end: span 3;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
-  background-color: var(--input-disabled);
+  background-color: var(--color-main);
+  border-bottom: 3px solid var(--main-dark);
 }
-#userContent {
-  position: absolute;
-  padding: 15px;
-  background-color: var(--input-disabled);
-  border-radius: 15px;
+.nav h2 {
+  color: var(--color-light);
+  font-weight: 600;
 }
 
-#userContent form {
+/*LoginForm*/
+.userContent {
+  position: absolute;
+  padding: 2em;
+  border-radius: 15px;
+  margin-top: 2vh;
+  background-color: var(--color-main);
+  border-bottom: 2px solid var(--main-dark);
+}
+
+.userContent form {
   display: flex;
   flex-direction: column;
 }
+.userContent input {
+  margin-bottom: 1em;
+  border-color: var(--main-dark);
+}
+.userContent label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+.userContent p {
+  font-size: 1rem;
+  margin-bottom: 1em;
+}
+.userContent button {
+  font-size: 1rem;
+  height: 2em;
+  min-width: 5em;
+  color: var(--color-dark);
+  background-color: var(--color-main);
+  border-radius: 5px;
+  border-top: 1px solid var(--main-dark);
+  border-left: 1px solid var(--main-dark);
+  border-bottom: 3px solid var(--main-dark);
+  border-right: 3px solid var(--main-dark);
+}
 
+.userContent button:hover {
+  scale: 105%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+.userContent button:active {
+  scale: 95%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+  border-top: 3px solid var(--main-dark);
+  border-left: 3px solid var(--main-dark);
+  border-bottom: 1px solid var(--main-dark);
+  border-right: 1px solid var(--main-dark);
+}
+
+.loginButton {
+  padding: 10%;
+  background-color: transparent;
+  border: 0px;
+  border-radius: 15px;
+}
+.loginButton:hover {
+  scale: 110%;
+  background-color: var(--main-active);
+}
+.loginButton:active {
+  scale: 95%;
+  background-color: var(--main-active);
+}
+
+/*GameSelect*/
+.gameSelect {
+  display: flex;
+  flex-direction: row;
+  padding: 5rem;
+}
+.gameCard {
+  display: grid;
+  width: 20rem;
+  height: 8rem;
+  background-color: var(--body-background);
+  border-radius: 15px;
+  justify-content: center;
+  align-content: center;
+}
+
+.gameCard a:link,
+a:visited {
+  color: var(--color-dark);
+  background-color: var(--body-background);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border: 3px solid var(--color-main);
+  border-radius: 15px;
+  padding: 1em;
+}
+
+.gameCard a:hover,
+a:active {
+  scale: 105%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+
+/*GameSetup*/
+.gameContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 input[type='radio'] {
   visibility: hidden;
   height: 0;
   width: 0;
 }
-
-#tagLabel {
+input[type='radio']:hover + .tagLabel {
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+input[type='radio']:checked + .tagLabel {
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+.tagSet {
+  border-radius: 10px;
+  width: 50%;
+  align-items: center;
+  width: stretch;
+}
+.tagSelector label {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   cursor: pointer;
   padding: 0.5em 2em;
   border-radius: 25px;
-  background-color: #cbcbcf;
+  color: var(--color-dark);
+  background-color: var(--color-main);
 }
-input[type='radio']:hover + #tagLabel {
-  background-color: #4d7fc9;
+.setupForm {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  margin-top: 2rem;
 }
-input[type='radio']:checked + #tagLabel {
-  background-color: #4d7fc9;
+.setupForm select {
+  width: 25%;
+  height: 5em;
+  border-radius: 10px;
+  margin-right: 1rem;
+  font-size: 1em;
+  padding: 1em;
+  color: var(--color-dark);
+  background-color: var(--color-main);
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 3px solid var(--main-dark);
+  border-right: 3px solid var(--main-dark);
+}
+.setupForm select:hover {
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+.setupForm select:active {
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+.submitBtn {
+  width: 25%;
+  height: 5em;
+  font-size: 1rem;
+  border-radius: 10px;
+  border-top: 0px;
+  border-left: 0px;
+  color: var(--color-dark);
+  background-color: var(--color-main);
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 3px solid var(--main-dark);
+  border-right: 3px solid var(--main-dark);
+}
+.submitBtn:hover {
+  scale: 105%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+}
+.submitBtn:active {
+  scale: 95%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+  border-top: 3px solid var(--main-dark);
+  border-left: 3px solid var(--main-dark);
+  border-bottom: 0px;
+  border-right: 0px;
+}
+/*ScoreCard*/
+.scoreCard {
+  grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: span 2;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+.scoreCard h2 {
+  color: var(--color-dark);
+}
+.coinSpan {
+  position: relative;
+}
+.flameSpan {
+  position: relative;
+}
+.coinSpan div {
+  position: absolute;
+  width: 100%;
+  top: 42%;
+  color: var(--color-dark);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.flameSpan div {
+  position: absolute;
+  width: 100%;
+  top: 65%;
+  color: var(--color-dark);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-#matchGame {
+/*MatchGame*/
+.matchGame {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 10% auto;
@@ -78,55 +305,51 @@ input[type='radio']:checked + #tagLabel {
   row-gap: 10px;
   padding: 5%;
 }
-#scoreCard {
-  grid-row: 1;
-  grid-column-start: 1;
-  grid-column-end: span 2;
-  justify-self: center;
-}
-
-#hostList {
+.hostList {
   grid-row: 2;
   grid-column: 1;
   display: flex;
   flex-direction: column;
   justify-self: center;
 }
-#studyList {
+.studyList {
   grid-row: 2;
   grid-column: 2;
   display: flex;
   flex-direction: column;
   justify-self: center;
 }
-
-#tagSet {
-  border-radius: 10px;
-  align-items: center;
-}
-
-#select {
-  width: 10em;
-  height: 5em;
-  border-radius: 10px;
-}
-
-#submitBtn {
-  width: 10em;
-  height: 5em;
-  border-radius: 10px;
-}
-
-#matchInput {
+/*MatchGame painikkeet*/
+.matchInput {
   width: 10em;
   height: 5em;
   border-radius: 10px;
   margin: 5px;
   text-wrap: wrap;
+  font-size: 1rem;
+  color: var(--color-dark);
+  background-color: var(--color-main);
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 3px solid var(--main-dark);
+  border-right: 3px solid var(--main-dark);
 }
-#matchInput:hover {
+.matchInput:hover {
   scale: 105%;
+  color: var(--color-light);
+  background-color: var(--main-active);
 }
-#matchInput:active {
+.matchInput:active {
   scale: 95%;
+  color: var(--color-light);
+  background-color: var(--main-active);
+  border-top: 3px solid var(--main-dark);
+  border-left: 3px solid var(--main-dark);
+  border-bottom: 0px;
+  border-right: 0px;
+}
+
+.matchInput:disabled {
+  color: var(--color-dark);
+  background-color: var(--main-disabled);
 }

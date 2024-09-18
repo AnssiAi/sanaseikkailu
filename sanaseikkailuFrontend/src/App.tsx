@@ -15,13 +15,13 @@ function App() {
   const [user, setUser] = useState<UserData>(null);
   return (
     <>
-      <div className='App'>
+      <div className='app'>
         <UserContext.Provider value={{ user, setUser }}>
-          <div id='nav'>
-            <h3>Sanaseikkailu</h3>
+          <div className='nav'>
+            <h2 className='appTitle'>Sanaseikkailu</h2>
             <LoginForm />
           </div>
-          <div className='Container'>
+          <div className='container'>
             <Router>
               <Routes>
                 <Route path='/' element={<GameSelect />} />

@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 const GameSelect = () => {
   return (
     <>
-      <div>
-        <Link to={'/matchgame'}>MatchGame</Link>
+      <div className='gameSelect'>
+        <div className='gameCard'>
+          <Link to={'/matchgame'}>MatchGame</Link>
+        </div>
       </div>
     </>
   );

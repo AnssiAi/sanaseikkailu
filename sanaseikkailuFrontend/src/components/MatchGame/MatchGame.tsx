@@ -222,26 +222,42 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
 
   return (
     <>
-      <div id='matchGame'>
+      <div className='matchGame'>
         {gameActive ? (
           <>
-            <div id='scoreCard'>
-              <h2>MatchGame</h2>
+            <div className='scoreCard'>
+              <div className='coinSpan'>
+                <img
+                  src='src\assets\icons\coinPile.svg'
+                  height={150}
+                  width={150}
+                />
+                <div>
+                  <p>{score}</p>
+                </div>
+              </div>
               <h2>
                 {('0' + minutes).slice(-2)}:{('0' + seconds).slice(-2)}
               </h2>
-              <h3>
-                Pisteet: {score} Putki: {streak}
-              </h3>
+              <div className='flameSpan'>
+                <img
+                  src='src\assets\icons\flame200.svg'
+                  height={150}
+                  width={150}
+                />
+                <div>
+                  <p>{streak}</p>
+                </div>
+              </div>
             </div>
-            <div id='hostList'>
+            <div className='hostList'>
               {hostWords.map((word, index) => (
                 <WordContext.Provider value={word} key={index}>
                   <MatchWordSelect list='host' handleSelect={handleSelect} />
                 </WordContext.Provider>
               ))}
             </div>
-            <div id='studyList'>
+            <div className='studyList'>
               {studyWords.map((word, index) => (
                 <WordContext.Provider value={word} key={index}>
                   <MatchWordSelect list='study' handleSelect={handleSelect} />
@@ -251,9 +267,29 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
           </>
         ) : (
           <>
-            <h3>
-              Pisteet: {score} Putki: {streak}
-            </h3>
+            <div className='scoreCard'>
+              <div className='coinSpan'>
+                <img
+                  src='src\assets\icons\coinPile.svg'
+                  height={150}
+                  width={150}
+                />
+                <div>
+                  <p>{score}</p>
+                </div>
+              </div>
+              <h2>Peli loppu!</h2>
+              <div className='flameSpan'>
+                <img
+                  src='src\assets\icons\flame200.svg'
+                  height={150}
+                  width={150}
+                />
+                <div>
+                  <p>{streak}</p>
+                </div>
+              </div>
+            </div>
           </>
         )}
       </div>

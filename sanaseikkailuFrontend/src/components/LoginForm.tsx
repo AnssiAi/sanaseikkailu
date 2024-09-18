@@ -55,15 +55,15 @@ const LoginForm = () => {
   };
 
   return (
-    <div id='loginContainer'>
+    <div className='loginContainer'>
       {visible ? (
         <>
-          <button id='userBtn' onClick={toggleVisibility}>
+          <button className='loginButton' onClick={toggleVisibility}>
             <span>
               <img src='src\assets\icons\login.svg' height={35} width={35} />
             </span>
           </button>
-          <div id='userContent'>
+          <div className='userContent'>
             {user ? (
               <>
                 <p>{user.username}</p>
@@ -95,7 +95,7 @@ const LoginForm = () => {
         </>
       ) : (
         <>
-          <button id='userBtn' onClick={toggleVisibility}>
+          <button className='loginButton' onClick={toggleVisibility}>
             <span>
               <img src='src\assets\icons\login.svg' height={35} width={35} />
             </span>
