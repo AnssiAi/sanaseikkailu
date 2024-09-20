@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
-import { LoggedPlayerUser, LoginData } from '../../types';
-import { userLogin } from '../services/loginService';
+import { LoggedPlayerUser, LoginData, NewPlayerUser } from '../../types';
+import { userLogin, postUser } from '../services/loginService';
 import { UserContext } from '../App';
 
 const LoginForm = () => {
@@ -17,7 +17,25 @@ const LoginForm = () => {
     try {
       const login: LoggedPlayerUser = await userLogin(loginData);
       setUser(login);
-      alert(`Logged in as ${login.username}`);
+    } catch (err: unknown) {
+      let errorMessage: string = 'Error: ';
+      if (err instanceof Error) {
+        errorMessage += err.message;
+      }
+      console.log(errorMessage);
+    }
+    clearFormData();
+  };
+
+  const registerUser = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    try {
+      const newUser: NewPlayerUser = {
+        ...loginData,
+        points: 0,
+      };
+      const register: LoggedPlayerUser = await postUser(newUser);
+      setUser(register);
     } catch (err: unknown) {
       let errorMessage: string = 'Error: ';
       if (err instanceof Error) {
@@ -46,7 +64,7 @@ const LoginForm = () => {
   const logOut = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setUser(null);
-    alert('Logged out');
+    alert('Kirjauduit ulos');
   };
 
   const toggleVisibility = (e: React.SyntheticEvent) => {
@@ -68,7 +86,7 @@ const LoginForm = () => {
               <>
                 <p>{user.username}</p>
                 <p>{user.points}</p>
-                <button onClick={logOut}>Logout</button>
+                <button onClick={logOut}>Kirjaudu ulos</button>
               </>
             ) : (
               <>
@@ -77,18 +95,31 @@ const LoginForm = () => {
                   <input
                     type='text'
                     name='username'
+                    required
                     value={loginData.username}
                     onChange={handleFormUpdate}
                   />
                   <label>Password:</label>
                   <input
-                    type='text'
+                    type='password'
                     name='password'
+                    required
                     value={loginData.password}
                     onChange={handleFormUpdate}
                   />
-                  <button type='submit'>Login</button>
+                  <button type='submit'>Kirjaudu</button>
                 </form>
+                <button
+                  onClick={registerUser}
+                  disabled={
+                    loginData.username.length > 0 &&
+                    loginData.password.length > 0
+                      ? false
+                      : true
+                  }
+                >
+                  Rekisteröidy
+                </button>
               </>
             )}
           </div>

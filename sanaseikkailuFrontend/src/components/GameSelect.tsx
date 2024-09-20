@@ -5,6 +5,7 @@ const GameSelect = () => {
     <>
       <div className='gameSelect'>
         <div className='gameCard'>
+          <img src='src/assets/icons/matchMap.svg' width={100} height={100} />
           <Link to={'/matchgame'}>MatchGame</Link>
         </div>
       </div>
