@@ -1,19 +1,17 @@
-import { Request, Response, Router } from "express";
-import jwt from "jsonwebtoken";
+import { Request, Response, Router } from 'express';
+import jwt from 'jsonwebtoken';
 import {
   addPlayerUser,
   verifyUniqueName,
-  getSecureUsers,
-  getUserById,
   updatePlayerUserPoints,
-} from "../services/mongoService";
+} from '../services/mongoService';
 import {
   LoggedPlayerUser,
   NewPlayerUser,
   SecurePlayerUser,
   UserParameters,
-} from "../../types";
-import { toNewPlayerUser } from "../../typeParsers";
+} from '../../types';
+import { toNewPlayerUser } from '../../typeParsers';
 
 const router: Router = Router();
 
@@ -21,7 +19,7 @@ let secret: string;
 if (process.env.SECRET) {
   secret = process.env.SECRET;
 } else {
-  throw new Error("SECRET environment variable is not set");
+  throw new Error('SECRET environment variable is not set');
 }
 
 const processToken = async (
@@ -37,38 +35,23 @@ const processToken = async (
     });
     return decodedToken;
   }
-  throw new Error("malformatted credentials");
+  throw new Error('malformatted credentials');
 };
 
-router.get("/", async (_req: Request, res: Response) => {
-  try {
-    const userList: SecurePlayerUser[] = await getSecureUsers();
-
-    res.status(200).send(userList);
-  } catch (error: unknown) {
-    let errorMessage = "Error: ";
-    if (error instanceof Error) {
-      errorMessage += error.message;
-    }
-    res.status(500).send(errorMessage);
-  }
-});
-
-router.post("/", async (_req: Request, res: Response) => {
+router.post('/', async (_req: Request, res: Response) => {
   try {
     //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla enumiin
     const bodyKeys: string[] = Object.keys(_req.body);
-    if (bodyKeys.every(i => i in UserParameters)) {
-      throw new Error("Missing fields");
+    if (bodyKeys.every((i) => i in UserParameters)) {
+      throw new Error('Missing fields');
     }
     const nameInUse: boolean = await verifyUniqueName(_req.body.username);
     if (nameInUse === true) {
-      throw new Error("Create a unique name");
+      throw new Error('Create a unique name');
     }
     const newUser: NewPlayerUser = await toNewPlayerUser(_req.body);
     const addedUser: SecurePlayerUser = await addPlayerUser(newUser);
 
-    //Kirjaudutaan sisään luodessa käyttäjä
     const token: string = jwt.sign(
       {
         username: addedUser.username,
@@ -84,7 +67,7 @@ router.post("/", async (_req: Request, res: Response) => {
 
     res.status(200).send(loggedUser);
   } catch (error: unknown) {
-    let errorMessage = "Error: ";
+    let errorMessage = 'Error: ';
     if (error instanceof Error) {
       errorMessage += error.message;
     }
@@ -92,44 +75,20 @@ router.post("/", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (_req: Request, res: Response) => {
+router.put('/', async (_req: Request, res: Response) => {
   try {
-    const id = _req.params.id;
-    const user: SecurePlayerUser = await getUserById(id);
-
-    res.status(200).send(user);
-  } catch (error: unknown) {
-    let errorMessage = "Error: ";
-    if (error instanceof Error) {
-      errorMessage += error.message;
-    }
-    res.status(500).send(errorMessage);
-  }
-});
-
-router.put("/", async (_req: Request, res: Response) => {
-  try {
-    /* Frontend ei saa id:tä. Käytetään uniikkeja käyttäjänimiä päivitykseen
-    const id = _req.params.id;
-    if (!authHeader) {
-      throw new Error("Missing credentials");
-    }
-      */
     if (!_req.body.username || !_req.body.points || !_req.body.token) {
-      throw new Error("Missing fields");
+      throw new Error('Missing fields');
     }
 
     const authorized = await processToken(_req.body.token);
     if (authorized) {
       const { username, points } = _req.body;
-      const user: SecurePlayerUser = await updatePlayerUserPoints(
-        username,
-        points
-      );
+      const user: SecurePlayerUser = await updatePlayerUserPoints(username, points);
       res.status(200).send(user);
     }
   } catch (error: unknown) {
-    let errorMessage = "Error: ";
+    let errorMessage = 'Error: ';
     if (error instanceof Error) {
       errorMessage += error.message;
     }

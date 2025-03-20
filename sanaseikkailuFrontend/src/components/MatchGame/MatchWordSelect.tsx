@@ -8,7 +8,6 @@ interface MatchWordSelectProps {
 
 const MatchWordSelect = ({ list, handleSelect }: MatchWordSelectProps) => {
   const { word, matchKey, complete } = useContext(WordContext);
-  //Tila hallitsemaan ilmettä?
 
   const handleClick = (e: React.SyntheticEvent) => {
     e.preventDefault;

@@ -6,6 +6,9 @@ import { getRandomInt, shuffle } from '../../utils';
 import { useTimer } from '../../hooks/useTimer';
 import { useScore } from '../../hooks/useScore';
 import MatchWordSelect from './MatchWordSelect';
+import coinPile from '../../../src/assets/icons/coinPile.svg';
+import flame from '../../../src/assets/icons/flame200.svg';
+import { Link } from 'react-router-dom';
 
 interface MatchGameProps {
   gameSettings: GameSettings;
@@ -61,8 +64,7 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
 
   //Tarkastetaan sanapari
   useEffect(() => {
-    const emptyCheck: boolean =
-      hostSelect.length !== 0 && studySelect.length !== 0;
+    const emptyCheck: boolean = hostSelect.length !== 0 && studySelect.length !== 0;
     if (emptyCheck) {
       hostSelect === studySelect ? isMatch() : notMatch();
     }
@@ -72,10 +74,8 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
   useEffect(() => {
     if (hostAvailable.length > 0 && studyAvailable.length > 0) {
       const timeoutId = setTimeout(() => {
-        const randHost: MatchWord =
-          hostAvailable[getRandomInt(hostAvailable.length)];
-        const randStudy: MatchWord =
-          studyAvailable[getRandomInt(studyAvailable.length)];
+        const randHost: MatchWord = hostAvailable[getRandomInt(hostAvailable.length)];
+        const randStudy: MatchWord = studyAvailable[getRandomInt(studyAvailable.length)];
         const newHostAvailable: MatchWord[] = hostAvailable.filter(
           (word) => word.matchKey !== randHost.matchKey
         );
@@ -115,8 +115,7 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
     while (result === undefined) {
       const randWord: GameWord = wordList[getRandomInt(len)];
       const matchString: string = (
-        randWord[gameSettings.hostLanguage] +
-        randWord[gameSettings.studyLanguage]
+        randWord[gameSettings.hostLanguage] + randWord[gameSettings.studyLanguage]
       )
         .split(' ')
         .join('');
@@ -226,27 +225,21 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
         {gameActive ? (
           <>
             <div className='scoreCard'>
-              <div className='coinSpan'>
-                <img
-                  src='src\assets\icons\coinPile.svg'
-                  height={150}
-                  width={150}
-                />
-                <div>
-                  <p>{score}</p>
+              <div className='scoreDetails'>
+                <div className='coinSpan'>
+                  <img src={coinPile} height={150} width={150} />
+                  <div>
+                    <p>{score}</p>
+                  </div>
                 </div>
-              </div>
-              <h2>
-                {('0' + minutes).slice(-2)}:{('0' + seconds).slice(-2)}
-              </h2>
-              <div className='flameSpan'>
-                <img
-                  src='src\assets\icons\flame200.svg'
-                  height={150}
-                  width={150}
-                />
-                <div>
-                  <p>{streak}</p>
+                <h2>
+                  {('0' + minutes).slice(-2)}:{('0' + seconds).slice(-2)}
+                </h2>
+                <div className='flameSpan'>
+                  <img src={flame} height={150} width={150} />
+                  <div>
+                    <p>{streak}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,27 +261,24 @@ const MatchGame = ({ gameSettings, wordList }: MatchGameProps) => {
         ) : (
           <>
             <div className='scoreCard'>
-              <div className='coinSpan'>
-                <img
-                  src='src\assets\icons\coinPile.svg'
-                  height={150}
-                  width={150}
-                />
-                <div>
-                  <p>{score}</p>
+              <div className='scoreDetails'>
+                <div className='coinSpan'>
+                  <img src={coinPile} height={150} width={150} />
+                  <div>
+                    <p>{score}</p>
+                  </div>
+                </div>
+                <h2>Peli loppu!</h2>
+                <div className='flameSpan'>
+                  <img src={flame} height={150} width={150} />
+                  <div>
+                    <p>{streak}</p>
+                  </div>
                 </div>
               </div>
-              <h2>Peli loppu!</h2>
-              <div className='flameSpan'>
-                <img
-                  src='src\assets\icons\flame200.svg'
-                  height={150}
-                  width={150}
-                />
-                <div>
-                  <p>{streak}</p>
-                </div>
-              </div>
+              <Link to={'/'}>
+                <h2>Palaa etusivulle</h2>
+              </Link>
             </div>
           </>
         )}

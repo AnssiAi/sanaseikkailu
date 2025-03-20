@@ -10,7 +10,6 @@ export const useScore = () => {
   const incStreak = (): void => {
     setStreak((prev) => prev + 1);
   };
-  //Eriytetään, jos komponentti ei käytä streakia
   const incScore = (): void => {
     setScore((prev) => prev + 1 + streak);
   };
