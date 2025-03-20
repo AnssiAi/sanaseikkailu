@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { apiUrl, baseUrl } from '../constants';
+import { apiUrl } from '../constants';
 import { LoggedPlayerUser, LoginData, NewPlayerUser } from '../../types';
 
 export const userLogin = (user: LoginData): Promise<LoggedPlayerUser> => {
   const request = axios
-    .post(`${baseUrl}/login`, user)
+    .post(`${apiUrl}/login`, user)
     .then((response) => {
       const data: LoggedPlayerUser = response.data;
       return data;

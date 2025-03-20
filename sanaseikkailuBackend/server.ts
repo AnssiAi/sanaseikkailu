@@ -16,7 +16,7 @@ const PORT: string = process.env.PORT ?? '3001';
 app.use('/api/col', colRouter);
 app.use('/api/it', itRouter);
 app.use('/api/users', userRouter);
-app.use('/login', loginRouter);
+app.use('/api/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
