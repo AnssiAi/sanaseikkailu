@@ -6,12 +6,8 @@ import itRouter from './src/routes/itWordRouter';
 import userRouter from './src/routes/userRouter';
 import loginRouter from './src/routes/loginRouter';
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-};
-
 const app = express();
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(express.static('dist'));
 
