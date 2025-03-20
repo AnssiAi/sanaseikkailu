@@ -23,7 +23,7 @@ if (process.env.SECRET) {
     secret = process.env.SECRET;
 }
 else {
-    throw new Error("SECRET environment variable is not set");
+    throw new Error('SECRET environment variable is not set');
 }
 const processToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     if (token) {
@@ -36,35 +36,21 @@ const processToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         });
         return decodedToken;
     }
-    throw new Error("malformatted credentials");
+    throw new Error('malformatted credentials');
 });
-router.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const userList = yield (0, mongoService_1.getSecureUsers)();
-        res.status(200).send(userList);
-    }
-    catch (error) {
-        let errorMessage = "Error: ";
-        if (error instanceof Error) {
-            errorMessage += error.message;
-        }
-        res.status(500).send(errorMessage);
-    }
-}));
-router.post("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla enumiin
         const bodyKeys = Object.keys(_req.body);
-        if (bodyKeys.every(i => i in types_1.UserParameters)) {
-            throw new Error("Missing fields");
+        if (bodyKeys.every((i) => i in types_1.UserParameters)) {
+            throw new Error('Missing fields');
         }
         const nameInUse = yield (0, mongoService_1.verifyUniqueName)(_req.body.username);
         if (nameInUse === true) {
-            throw new Error("Create a unique name");
+            throw new Error('Create a unique name');
         }
         const newUser = yield (0, typeParsers_1.toNewPlayerUser)(_req.body);
         const addedUser = yield (0, mongoService_1.addPlayerUser)(newUser);
-        //Kirjaudutaan sisään luodessa käyttäjä
         const token = jsonwebtoken_1.default.sign({
             username: addedUser.username,
         }, secret, { expiresIn: 60 * 60 });
@@ -76,37 +62,17 @@ router.post("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).send(loggedUser);
     }
     catch (error) {
-        let errorMessage = "Error: ";
+        let errorMessage = 'Error: ';
         if (error instanceof Error) {
             errorMessage += error.message;
         }
         res.status(500).send(errorMessage);
     }
 }));
-router.get("/:id", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = _req.params.id;
-        const user = yield (0, mongoService_1.getUserById)(id);
-        res.status(200).send(user);
-    }
-    catch (error) {
-        let errorMessage = "Error: ";
-        if (error instanceof Error) {
-            errorMessage += error.message;
-        }
-        res.status(500).send(errorMessage);
-    }
-}));
-router.put("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        /* Frontend ei saa id:tä. Käytetään uniikkeja käyttäjänimiä päivitykseen
-        const id = _req.params.id;
-        if (!authHeader) {
-          throw new Error("Missing credentials");
-        }
-          */
         if (!_req.body.username || !_req.body.points || !_req.body.token) {
-            throw new Error("Missing fields");
+            throw new Error('Missing fields');
         }
         const authorized = yield processToken(_req.body.token);
         if (authorized) {
@@ -116,7 +82,7 @@ router.put("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (error) {
-        let errorMessage = "Error: ";
+        let errorMessage = 'Error: ';
         if (error instanceof Error) {
             errorMessage += error.message;
         }

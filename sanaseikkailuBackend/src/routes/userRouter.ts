@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 import {
   addPlayerUser,
   verifyUniqueName,
-  getSecureUsers,
-  getUserById,
   updatePlayerUserPoints,
 } from '../services/mongoService';
 import {
@@ -40,20 +38,6 @@ const processToken = async (
   throw new Error('malformatted credentials');
 };
 
-router.get('/', async (_req: Request, res: Response) => {
-  try {
-    const userList: SecurePlayerUser[] = await getSecureUsers();
-
-    res.status(200).send(userList);
-  } catch (error: unknown) {
-    let errorMessage = 'Error: ';
-    if (error instanceof Error) {
-      errorMessage += error.message;
-    }
-    res.status(500).send(errorMessage);
-  }
-});
-
 router.post('/', async (_req: Request, res: Response) => {
   try {
     //json kenttää arvolla 0 ei tunnisteta. Vaadittujen avainten läsnäolo tarkastetaan vertailemalla enumiin
@@ -68,7 +52,6 @@ router.post('/', async (_req: Request, res: Response) => {
     const newUser: NewPlayerUser = await toNewPlayerUser(_req.body);
     const addedUser: SecurePlayerUser = await addPlayerUser(newUser);
 
-    //Kirjaudutaan sisään luodessa käyttäjä
     const token: string = jwt.sign(
       {
         username: addedUser.username,
@@ -83,21 +66,6 @@ router.post('/', async (_req: Request, res: Response) => {
     };
 
     res.status(200).send(loggedUser);
-  } catch (error: unknown) {
-    let errorMessage = 'Error: ';
-    if (error instanceof Error) {
-      errorMessage += error.message;
-    }
-    res.status(500).send(errorMessage);
-  }
-});
-
-router.get('/:id', async (_req: Request, res: Response) => {
-  try {
-    const id = _req.params.id;
-    const user: SecurePlayerUser = await getUserById(id);
-
-    res.status(200).send(user);
   } catch (error: unknown) {
     let errorMessage = 'Error: ';
     if (error instanceof Error) {
