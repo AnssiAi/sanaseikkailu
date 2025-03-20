@@ -1,3 +1,3 @@
 Sanaseikkailu:
 
-Sanaseikkailu on projekti luoda erilaisia pieniä pelejä kieltenopiskelun helpottamiseksi.
+Sanaseikkailu on projekti luoda erilaisia pelejä kieltenopiskelun helpottamiseksi.
