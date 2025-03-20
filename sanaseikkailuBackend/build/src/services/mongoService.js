@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyUniqueName = exports.updatePlayerUserPoints = exports.addPlayerUser = exports.getUserByName = exports.getUserById = exports.getSecureUsers = exports.getAllWords = void 0;
+exports.verifyUniqueName = exports.updatePlayerUserPoints = exports.addPlayerUser = exports.getUserByName = exports.getUserById = exports.getSecureUsers = exports.getAllWords = exports.getWordCollections = void 0;
 require("dotenv/config");
 const mongodb_1 = require("mongodb");
+const types_1 = require("../../types");
 const typeParsers_1 = require("../../typeParsers");
 //Ehtolauseella käsitellään undefined mahdollisuus.
 let connect;
@@ -19,21 +20,21 @@ if (process.env.DB_CONN_STRING) {
     connect = process.env.DB_CONN_STRING;
 }
 else {
-    throw new Error("DB_CONN_STRING environment variable is not set");
+    throw new Error('DB_CONN_STRING environment variable is not set');
 }
 let dbName;
 if (process.env.DB_NAME) {
     dbName = process.env.DB_NAME;
 }
 else {
-    throw new Error("DB_NAME environment variable is not set");
+    throw new Error('DB_NAME environment variable is not set');
 }
 let userCollection;
 if (process.env.USER_COLLECTION_NAME) {
     userCollection = process.env.USER_COLLECTION_NAME;
 }
 else {
-    throw new Error("USER_COLLECTION_NAME environment variable is not set");
+    throw new Error('USER_COLLECTION_NAME environment variable is not set');
 }
 const client = new mongodb_1.MongoClient(connect);
 const createDbConnection = (collection) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,6 +42,15 @@ const createDbConnection = (collection) => __awaiter(void 0, void 0, void 0, fun
     const db = client.db(dbName);
     return db.collection(collection);
 });
+const getWordCollections = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allowed = Object.values(types_1.AllowedCollections);
+    yield client.connect();
+    const db = client.db(dbName);
+    const collections = (yield db.listCollections().toArray()).filter((collection) => allowed.includes(collection.name));
+    const wordCollections = collections.map((collection) => collection.name);
+    return wordCollections;
+});
+exports.getWordCollections = getWordCollections;
 const getAllWords = (collection) => __awaiter(void 0, void 0, void 0, function* () {
     const data = (yield createDbConnection(collection)).find({});
     const dataArray = yield data.toArray();
@@ -66,11 +76,11 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         .findOne({
         _id: new mongodb_1.ObjectId(id),
     })
-        .then(data => {
+        .then((data) => {
         const result = (0, typeParsers_1.toSecurePlayerUser)(data);
         return result;
     })
-        .catch(err => {
+        .catch((err) => {
         throw Error(err);
     });
     return result;
@@ -81,11 +91,11 @@ const getUserByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
         .findOne({
         username: name,
     })
-        .then(data => {
+        .then((data) => {
         const result = (0, typeParsers_1.toPlayerUser)(data);
         return result;
     })
-        .catch(err => {
+        .catch((err) => {
         throw Error(err);
     });
     return result;
@@ -98,7 +108,7 @@ const addPlayerUser = (entry) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield (0, exports.getUserById)(data.insertedId.toString());
         return result;
     }))
-        .catch(err => {
+        .catch((err) => {
         throw Error(err);
     });
     return result;
@@ -111,7 +121,7 @@ const updatePlayerUserPoints = (name, points) => __awaiter(void 0, void 0, void 
         const updatedPlayer = (0, typeParsers_1.toSecurePlayerUser)(yield (0, exports.getUserByName)(name));
         return updatedPlayer;
     }))
-        .catch(err => {
+        .catch((err) => {
         throw Error(err);
     });
     return result;
@@ -122,14 +132,14 @@ const verifyUniqueName = (name) => __awaiter(void 0, void 0, void 0, function* (
         .findOne({
         username: name,
     })
-        .then(data => {
+        .then((data) => {
         let result = false;
         if (data) {
             result = true;
         }
         return result;
     })
-        .catch(err => {
+        .catch((err) => {
         throw Error(err);
     });
     return result;

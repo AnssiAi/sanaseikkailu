@@ -1,9 +1,8 @@
-import { createContext, lazy, Suspense, useState } from 'react';
+import { createContext, lazy, Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GameSelect from './components/GameSelect';
-import LoginForm from './components/LoginForm';
 import { UserObject, UserData } from '../types';
-//import MatchGameSetup from "./components/MatchGame/MatchGameSetup";
+import GameSelect from './components/GameSelect';
+import LoginContainer from './components/LoginContainer';
 
 const GameSetup = lazy(() => import('./components/GameSetup'));
 export const UserContext = createContext<UserObject>({
@@ -13,13 +12,21 @@ export const UserContext = createContext<UserObject>({
 
 function App() {
   const [user, setUser] = useState<UserData>(null);
+
+  useEffect(() => {
+    const json = localStorage.getItem('WQ-persist');
+    if (json !== null) {
+      setUser(JSON.parse(json));
+    }
+  }, []);
+
   return (
     <>
       <div className='app'>
         <UserContext.Provider value={{ user, setUser }}>
           <div className='nav'>
             <h2 className='appTitle'>Sanaseikkailu</h2>
-            <LoginForm />
+            <LoginContainer />
           </div>
           <div className='container'>
             <Router>

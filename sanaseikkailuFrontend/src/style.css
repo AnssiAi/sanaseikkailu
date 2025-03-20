@@ -15,6 +15,7 @@ html {
   --main-disabled: #9ab1a3;
   --body-background: #e6eae2;
   --game-background: #f6f6f6;
+  --error-background: #ff3131;
 }
 
 /*Base*/
@@ -22,6 +23,10 @@ body {
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--body-background);
+}
+
+button {
+  padding: 0.5em;
 }
 
 .app {
@@ -44,6 +49,15 @@ input[type='text'] {
   border-radius: 5px;
   width: 20em;
   height: 2em;
+}
+.inputError {
+  display: flex;
+  height: min-content;
+  width: auto;
+  padding: 0.5em;
+  background-color: var(--error-background);
+  color: var(--color-light);
+  border-radius: 0.5em;
 }
 
 /*Nav*/
@@ -124,7 +138,6 @@ input[type='text'] {
 }
 
 .loginButton {
-  padding: 10%;
   background-color: transparent;
   border: 0px;
   border-radius: 15px;
@@ -155,8 +168,8 @@ input[type='password'] {
 .gameCard {
   display: grid;
   grid-template-columns: 40% 60%;
-  width: 20em;
-  height: 8em;
+  min-width: 20em;
+  max-height: 10em;
   background-color: var(--body-background);
   border-radius: 15px;
   justify-items: center;
@@ -287,11 +300,16 @@ input[type='radio']:checked + .tagLabel {
   grid-column-start: 1;
   grid-column-end: span 2;
   display: flex;
-  flex-direction: row;
+  gap: 2em;
+  flex-direction: column;
   text-align: center;
 }
 .scoreCard h2 {
   color: var(--color-dark);
+}
+.scoreDetails {
+  display: flex;
+  flex-direction: row;
 }
 .coinSpan {
   position: relative;
@@ -315,7 +333,6 @@ input[type='radio']:checked + .tagLabel {
   font-size: 1rem;
   font-weight: 600;
 }
-
 /*MatchGame*/
 .matchGame {
   display: grid;
